@@ -8,9 +8,13 @@ added. Expect this implementation to deviate from the original Lox specification
  in the future.
 
 ## Getting Started
-Download the code. It uses C++20 and CMake. For a better understanding of the 
+Download the code. It uses the C++20 standard. For a better understanding of the 
 basic Lox language, read the [Crafting Interpreters](https://craftinginterpreters.com/) site.
 In particular, read [Appendix I: Lox Grammar](https://craftinginterpreters.com/appendix-i.html).
+
+## Dependencies
+The project uses CMake and the {fmt} library. The {fmt} library must be compiled
+ and installed per its instructions.
 
 ## Contributing
 As with most of my projects, just fork it.
