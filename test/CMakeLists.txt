@@ -11,7 +11,7 @@ set(SOURCE_CODE
         ../src/chunk.h ../src/chunk.cpp
         ../src/debugger.h ../src/debugger.cpp
         main.cpp
-        TestDebugger.cpp)
+        TestDebugger.cpp TestChunk.cpp)
 
 add_executable(testclox ${SOURCE_CODE})
 
