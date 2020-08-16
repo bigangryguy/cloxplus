@@ -7,8 +7,11 @@
 
 TEST_CASE("disassembleChunk - Valid chunk", "[Debugger]") {
   cloxplus::Chunk chunk{};
-  chunk.write(cloxplus::OpCode::OP_RETURN);
-  std::string expected{ "==[ Test ]==\n0 OP_RETURN\n" };
+  chunk.writeInstruction(cloxplus::OpCode::OP_RETURN);
+  uint8_t index = chunk.writeConstant(3.14);
+  chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT);
+  chunk.writeInstruction(static_cast<uint8_t>(index));
+  std::string expected{ "==[ Test ]==\n0 OP_RETURN\n1 OP_CONSTANT 0 '3.14'\n" };
   REQUIRE(cloxplus::Debugger::disassembleChunk(chunk, "Test") == expected);
 }
 

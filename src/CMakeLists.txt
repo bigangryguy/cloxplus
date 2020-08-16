@@ -8,9 +8,9 @@ set(SOURCE_CODE
         common.h
         value.h
         opcode.h
-        chunk.h chunk.cpp
-        debugger.h debugger.cpp
-)
+        chunk.cpp chunk.h
+        debugger.cpp debugger.h
+        )
 
 add_executable(clox ${SOURCE_CODE})
 

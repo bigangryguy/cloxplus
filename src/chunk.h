@@ -2,16 +2,21 @@
 
 #include "common.h"
 #include "opcode.h"
+#include "value.h"
 #include <vector>
 
 namespace cloxplus {
 class Chunk {
  public:
-  void write(uint8_t byte);
-  size_t length() const noexcept;
-  uint8_t get(size_t offset) const;
+  void writeInstruction(uint8_t instruction);
+  [[nodiscard]] size_t writeConstant(Value value);
+  size_t lengthInstructions() const noexcept;
+  size_t lengthConstants() const noexcept;
+  [[nodiscard]] uint8_t getInstruction(size_t offset) const;
+  [[nodiscard]] Value getConstant(size_t offset) const;
 
  private:
-  std::vector<uint8_t> m_code;
+  std::vector<uint8_t> m_instructions{};
+  std::vector<Value> m_constants{};
 };
 }

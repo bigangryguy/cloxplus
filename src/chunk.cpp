@@ -1,14 +1,28 @@
 #include "chunk.h"
 
 namespace cloxplus {
-void Chunk::write(uint8_t byte) { m_code.push_back(byte);
+void Chunk::writeInstruction(uint8_t instruction) {
+  m_instructions.push_back(instruction);
 }
 
-size_t Chunk::length() const noexcept {
-  return m_code.size();
+size_t Chunk::writeConstant(Value value) {
+  m_constants.push_back(value);
+  return m_constants.size() - 1;
 }
 
-uint8_t Chunk::get(size_t offset) const {
-  return m_code[offset];
+size_t Chunk::lengthInstructions() const noexcept {
+  return m_instructions.size();
+}
+
+size_t Chunk::lengthConstants() const noexcept {
+  return m_constants.size();
+}
+
+uint8_t Chunk::getInstruction(size_t offset) const {
+  return m_instructions[offset];
+}
+
+Value Chunk::getConstant(size_t offset) const {
+  return m_constants[offset];
 }
 }
