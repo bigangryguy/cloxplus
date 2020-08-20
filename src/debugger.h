@@ -6,7 +6,7 @@
 
 namespace cloxplus {
 class Debugger {
- public:
+public:
   static std::string disassembleChunk(const Chunk& chunk,
                                        const std::string& name);
 private:

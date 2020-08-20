@@ -4,7 +4,7 @@
 
 TEST_CASE("Chunk - writeInstruction", "[Chunk]") {
   cloxplus::Chunk chunk{};
-  REQUIRE_NOTHROW(chunk.writeInstruction(cloxplus::OpCode::OP_RETURN));
+  REQUIRE_NOTHROW(chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 1));
 }
 
 TEST_CASE("Chunk - writeConstant", "[Chunk]") {
@@ -16,14 +16,14 @@ TEST_CASE("Chunk - lengthInstructions", "[Chunk]") {
   cloxplus::Chunk chunk{};
 
   SECTION("Single writeInstruction") {
-    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN);
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 1);
     REQUIRE(chunk.lengthInstructions() == 1);
   }
 
   SECTION("Three writeInstruction") {
-    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN);
-    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN);
-    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN);
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 1);
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 2);
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 3);
     REQUIRE(chunk.lengthInstructions() == 3);
   }
 }
@@ -52,15 +52,15 @@ TEST_CASE("Chunk - getInstruction", "[Chunk]") {
   cloxplus::Chunk chunk{};
 
   SECTION("Single value") {
-    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN);
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 1);
     auto expected = cloxplus::OpCode::OP_RETURN;
     REQUIRE(chunk.getInstruction(0) == expected);
   }
 
   SECTION("Three values") {
-    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN);
-    chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT);
-    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN);
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 1);
+    chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT, 2);
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 3);
     auto expected = cloxplus::OpCode::OP_CONSTANT;
     REQUIRE(chunk.getInstruction(1) == expected);
   }
@@ -81,5 +81,23 @@ TEST_CASE("Chunk - getConstant", "[Chunk]") {
     index = chunk.writeConstant(99.9);
     auto expected = 42.0;
     REQUIRE(chunk.getConstant(1) == expected);
+  }
+}
+
+TEST_CASE("Chunk - getLine", "[Chunk]") {
+  cloxplus::Chunk chunk{};
+
+  SECTION("Single line") {
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 1);
+    auto expected = 1;
+    REQUIRE(chunk.getLine(0) == expected);
+  }
+
+  SECTION("Three values") {
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 1);
+    chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT, 2);
+    chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 3);
+    auto expected = 2;
+    REQUIRE(chunk.getLine(1) == expected);
   }
 }

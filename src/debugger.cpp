@@ -19,7 +19,13 @@ size_t Debugger::disassembleInstruction(const Chunk& chunk,
                                         size_t offset,
                                         std::string& output)
 {
-  output += fmt::format("{} ", offset);
+  output += fmt::format("{:04d} ", offset);
+
+  if (offset > 0 && chunk.getLine(offset) == chunk.getLine(offset-1)) {
+    output += "   | ";
+  } else {
+    output += fmt::format("{:4d} ", chunk.getLine(offset));
+  }
 
   auto instruction = chunk.getInstruction(offset);
   switch (instruction) {
@@ -48,7 +54,7 @@ size_t Debugger::constantInstruction(const std::string& name,
 {
   size_t constantOffset = chunk.getInstruction(offset + 1);
   auto constantValue = chunk.getConstant(constantOffset);
-  output += fmt::format("{} {} '{}'\n",
+  output += fmt::format("{} {:04d} '{:g}'\n",
                         name, constantOffset, constantValue);
   return offset + 2;
 }
