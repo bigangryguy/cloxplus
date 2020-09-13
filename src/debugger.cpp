@@ -10,6 +10,7 @@ std::string Debugger::disassembleChunk(const Chunk& chunk,
 
   for (auto offset = 0; offset < chunk.lengthInstructions();) {
     offset = disassembleInstruction(chunk, offset, output);
+    output += '\n';
   }
 
   return output;
@@ -34,7 +35,7 @@ size_t Debugger::disassembleInstruction(const Chunk& chunk,
   case OpCode::OP_CONSTANT:
     return constantInstruction("OP_CONSTANT", chunk, offset, output);
   default:
-    output += fmt::format("Unknown opcode {}\n", instruction);
+    output += fmt::format("Unknown opcode {}", instruction);
     return offset + 1;
   }
 }
@@ -43,7 +44,7 @@ size_t Debugger::simpleInstruction(const std::string& name,
                                    size_t offset,
                                    std::string& output)
 {
-  output += fmt::format("{}\n", name);
+  output += fmt::format("{}", name);
   return offset + 1;
 }
 
@@ -54,7 +55,7 @@ size_t Debugger::constantInstruction(const std::string& name,
 {
   size_t constantOffset = chunk.getInstruction(offset + 1);
   auto constantValue = chunk.getConstant(constantOffset);
-  output += fmt::format("{} {:04d} '{:g}'\n",
+  output += fmt::format("{} {:04d} '{:g}'",
                         name, constantOffset, constantValue);
   return offset + 2;
 }

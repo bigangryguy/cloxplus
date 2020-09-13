@@ -10,7 +10,7 @@ set(SOURCE_CODE
         opcode.h
         chunk.cpp chunk.h
         debugger.cpp debugger.h
-        vm.cpp vm.h)
+        vm.cpp vm.h interpretresult.h value.cpp)
 
 add_executable(clox ${SOURCE_CODE})
 
