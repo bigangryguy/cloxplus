@@ -2,7 +2,10 @@
 #include "chunk.h"
 #include "opcode.h"
 #include "value.h"
+
+#ifdef DEBUG_TRACE_EXECUTION
 #include "debugger.h"
+#endif
 
 namespace cloxplus {
 VM::VM()
