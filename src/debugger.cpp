@@ -34,6 +34,16 @@ size_t Debugger::disassembleInstruction(const Chunk& chunk,
     return simpleInstruction("OP_RETURN", offset, output);
   case OpCode::OP_CONSTANT:
     return constantInstruction("OP_CONSTANT", chunk, offset, output);
+  case OpCode::OP_NEGATE:
+    return simpleInstruction("OP_NEGATE", offset, output);
+  case OpCode::OP_ADD:
+    return simpleInstruction("OP_ADD", offset, output);
+  case OpCode::OP_SUBTRACT:
+    return simpleInstruction("OP_SUBTRACT", offset, output);
+  case OpCode::OP_MULTIPLY:
+    return simpleInstruction("OP_MULTIPLY", offset, output);
+  case OpCode::OP_DIVIDE:
+    return simpleInstruction("OP_DIVIDE", offset, output);
   default:
     output += fmt::format("Unknown opcode {}", instruction);
     return offset + 1;

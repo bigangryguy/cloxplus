@@ -9,8 +9,21 @@
 int main(int argc, const char* argv[]) {
   cloxplus::Chunk chunk{};
   chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT, 1);
-  chunk.writeInstruction(chunk.writeConstant(3.14), 1);
-  chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 2);
+  chunk.writeInstruction(chunk.writeConstant(3.15), 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_NEGATE, 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT, 1);
+  chunk.writeInstruction(chunk.writeConstant(10), 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_ADD, 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT, 1);
+  chunk.writeInstruction(chunk.writeConstant(2), 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_SUBTRACT, 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT, 1);
+  chunk.writeInstruction(chunk.writeConstant(4), 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_MULTIPLY, 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_CONSTANT, 1);
+  chunk.writeInstruction(chunk.writeConstant(5), 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_DIVIDE, 1);
+  chunk.writeInstruction(cloxplus::OpCode::OP_RETURN, 1);
 
   cloxplus::VM vm{};
   cloxplus::InterpretResult result =
