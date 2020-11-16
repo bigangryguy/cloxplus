@@ -51,6 +51,7 @@ InterpretResult VM::run()
       m_stack.pop_back();
       return std::make_pair(v1, v2);
     };
+
     uint8_t instruction = ReadInstruction();
     switch (instruction) {
       case OpCode::OP_CONSTANT: {
@@ -59,22 +60,22 @@ InterpretResult VM::run()
         m_stack.push_back(constant);
         break;
       }
-      case OP_ADD: {
+      case OpCode::OP_ADD: {
         const auto operands = getBinaryOperands();
         m_stack.push_back(operands.first + operands.second);
         break;
       }
-      case OP_SUBTRACT: {
+      case OpCode::OP_SUBTRACT: {
         const auto operands = getBinaryOperands();
         m_stack.push_back(operands.second - operands.first);
         break;
       }
-      case OP_MULTIPLY: {
+      case OpCode::OP_MULTIPLY: {
         const auto operands = getBinaryOperands();
         m_stack.push_back(operands.first * operands.second);
         break;
       }
-      case OP_DIVIDE: {
+      case OpCode::OP_DIVIDE: {
         const auto operands = getBinaryOperands();
         m_stack.push_back(operands.second / operands.first);
         break;

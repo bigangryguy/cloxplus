@@ -1,5 +1,4 @@
 #include "chunk.h"
-#include "debugger.h"
 #include "vm.h"
 
 #include <fmt/core.h>
