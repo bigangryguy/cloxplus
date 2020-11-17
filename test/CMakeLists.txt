@@ -10,6 +10,8 @@ set(SOURCE_CODE
         ../src/opcode.h
         ../src/chunk.h ../src/chunk.cpp
         ../src/debugger.h ../src/debugger.cpp
+        ../src/repl.cpp ../src/repl.h
+        ../src/compiler.cpp ../src/compiler.h
         main.cpp
         TestDebugger.cpp TestChunk.cpp)
 

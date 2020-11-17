@@ -2,3 +2,9 @@
 
 #include <cstddef>
 #include <cstdint>
+
+namespace cloxplus {
+static constexpr int EXIT_COMPILE_ERROR = 65;
+static constexpr int EXIT_RUNTIME_ERROR = 70;
+static constexpr int EXIT_FILE_ERROR = 74;
+}
