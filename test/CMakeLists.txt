@@ -12,6 +12,8 @@ set(SOURCE_CODE
         ../src/debugger.h ../src/debugger.cpp
         ../src/repl.cpp ../src/repl.h
         ../src/compiler.cpp ../src/compiler.h
+        ../src/scanner.cpp ../src/scanner.h
+        ../src/token.cpp ../src/token.h
         main.cpp
         TestDebugger.cpp TestChunk.cpp)
 

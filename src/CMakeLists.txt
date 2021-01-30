@@ -13,7 +13,9 @@ set(SOURCE_CODE
         vm.cpp vm.h
         interpretresult.h
         repl.cpp repl.h
-        compiler.cpp compiler.h)
+        compiler.cpp compiler.h
+        scanner.cpp scanner.h
+        token.cpp token.h)
 
 add_executable(clox ${SOURCE_CODE})
 
