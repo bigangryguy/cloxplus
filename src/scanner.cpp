@@ -68,7 +68,7 @@ bool Scanner::match(char expected) {
     return false;
   }
 
-  if (m_source[m_currentPosition] != expected) {
+  if (m_source[m_currentPosition+1] != expected) {
     return false;
   }
 
@@ -107,6 +107,8 @@ void Scanner::skipWhitespace() {
 }
 
 Token Scanner::string() {
+  //m_startPosition = m_currentPosition;
+  m_currentPosition++;
   while (m_source[m_currentPosition] != '"' && !isAtEnd()) {
     if (m_source[m_currentPosition] == '\n') {
       m_line++;
@@ -118,7 +120,7 @@ Token Scanner::string() {
     return errorToken("Unterminated string.");
   }
 
-  m_currentPosition++;
+  //m_currentPosition++;
   return makeToken(TokenType::TOKEN_STRING);
 }
 
@@ -134,6 +136,7 @@ Token Scanner::number() {
       m_currentPosition++;
     }
   }
+  m_currentPosition--;
 
   return makeToken(TokenType::TOKEN_NUMBER);
 }
@@ -142,6 +145,7 @@ Token Scanner::identifier() {
   while (isAlpha(m_source[m_currentPosition]) || isDigit(m_source[m_currentPosition])) {
     m_currentPosition++;
   }
+  m_currentPosition--;
 
   return makeToken(identifierType(currentLexeme()));
 }

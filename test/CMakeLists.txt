@@ -15,7 +15,7 @@ set(SOURCE_CODE
         ../src/scanner.cpp ../src/scanner.h
         ../src/token.cpp ../src/token.h
         main.cpp
-        TestDebugger.cpp TestChunk.cpp)
+        TestDebugger.cpp TestChunk.cpp TestScanner.cpp)
 
 add_executable(testclox ${SOURCE_CODE})
 
