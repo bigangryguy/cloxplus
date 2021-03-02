@@ -3,10 +3,8 @@
 #include "../src/scanner.h"
 #include "../src/token.h"
 
-#include <string>
 #include <string_view>
 #include <vector>
-#include <iostream>
 
 TEST_CASE("isDigit", "[Scanner]") {
   const std::string digits{"0123456789"};
@@ -43,7 +41,7 @@ TEST_CASE("isAlpha", "[Scanner]") {
 }
 
 TEST_CASE("scanToken", "[Scanner]") {
-  const std::string source{"(){};,.-+/*!=! ===<=<>=>\n\"Hello\",\nx2=12.73"};
+  const std::string source{"(){};,.-+/*!=! ===<=<>=>\n\"Hello\",\nx2 = 12.73"};
 
   cloxplus::Scanner scanner(source);
   int index = 0;
