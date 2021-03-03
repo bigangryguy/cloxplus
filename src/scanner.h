@@ -25,7 +25,9 @@ private:
   Token identifier();
   [[nodiscard]] bool isAtEnd() const;
 
-  [[nodiscard]] static TokenType identifierType(std::string_view identifier) ;
+  [[nodiscard]] TokenType identifierType(std::string_view identifier);
+  [[nodiscard]] TokenType checkKeyword(int start, int length,
+                                       const std::string& rest, TokenType type);
 
   std::string m_source;
   const size_t m_lengthSource;
