@@ -10,8 +10,11 @@ class Chunk {
  public:
   void writeInstruction(uint8_t instruction, int line);
   [[nodiscard]] size_t writeConstant(Value value);
-  size_t lengthInstructions() const noexcept;
-  size_t lengthConstants() const noexcept;
+
+  void clear();
+
+  [[nodiscard]] size_t lengthInstructions() const noexcept;
+  [[nodiscard]] size_t lengthConstants() const noexcept;
   [[nodiscard]] uint8_t getInstruction(size_t offset) const;
   [[nodiscard]] Value getConstant(size_t offset) const;
   [[nodiscard]] int getLine(size_t offset) const;

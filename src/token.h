@@ -31,16 +31,16 @@ enum class TokenType {
 
 class Token {
 public:
-  Token(TokenType type, std::string_view lexeme, int line);
+  Token(TokenType type, std::string_view lexeme, int line, int start);
 
   [[nodiscard]] TokenType type() const { return m_type; }
   [[nodiscard]] std::string_view lexeme() const { return m_lexeme; }
   [[nodiscard]] int line() const { return m_line; }
-  [[nodiscard]] int length() const { return m_length; }
+  [[nodiscard]] int start() const { return m_start; }
 private:
-  const TokenType m_type;
-  const std::string_view m_lexeme;
-  const size_t m_length;
-  const int m_line;
+  TokenType m_type;
+  std::string_view m_lexeme;
+  int m_line;
+  int m_start;
 };
 }

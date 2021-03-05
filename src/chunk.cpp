@@ -11,6 +11,12 @@ size_t Chunk::writeConstant(Value value) {
   return m_constants.size() - 1;
 }
 
+void Chunk::clear() {
+  m_instructions.clear();
+  m_constants.clear();
+  m_lines.clear();
+}
+
 size_t Chunk::lengthInstructions() const noexcept {
   return m_instructions.size();
 }

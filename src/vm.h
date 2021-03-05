@@ -2,21 +2,19 @@
 
 #include "interpretresult.h"
 #include "value.h"
+#include "chunk.h"
 
-#include <memory>
 #include <vector>
 
 namespace cloxplus {
-class Chunk;
-
 class VM {
 public:
   VM();
   ~VM();
 
-  InterpretResult interpret(std::unique_ptr<Chunk> chunk);
+  InterpretResult interpret(const std::string& source);
 private:
-  std::unique_ptr<Chunk> m_chunk;
+  Chunk m_chunk{};
   size_t m_ip;
   // Using std::vector instead of std::stack to make printing
   // debugger output much simpler

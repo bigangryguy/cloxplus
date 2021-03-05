@@ -1,8 +1,9 @@
 #include "vm.h"
-#include "chunk.h"
 #include "opcode.h"
+#include "compiler.h"
 
 #include <tuple>
+#include <string>
 
 #ifdef DEBUG_TRACE_EXECUTION
 #include "debugger.h"
@@ -17,18 +18,25 @@ VM::~VM()
 {
 }
 
-InterpretResult VM::interpret(std::unique_ptr<Chunk> chunk)
+InterpretResult VM::interpret(const std::string& source)
 {
-  m_chunk = std::move(chunk);
-  m_ip = 0;
-  return run();
+  Compiler compiler(source);
+  if (compiler.compile(&m_chunk)) {
+    m_chunk.clear();
+    return InterpretResult::INTERPRET_COMPILE_ERROR;
+  }
+
+  InterpretResult result = run();
+  m_chunk.clear();
+
+  return result;
 }
 
 InterpretResult VM::run()
 {
   auto ReadByte = [this](){ return m_ip++; };
   auto ReadInstruction = [this, ReadByte](){
-    return m_chunk->getInstruction(ReadByte());
+    return m_chunk.getInstruction(ReadByte());
   };
 
   for (;;) {
@@ -55,8 +63,8 @@ InterpretResult VM::run()
     uint8_t instruction = ReadInstruction();
     switch (instruction) {
       case OpCode::OP_CONSTANT: {
-        size_t constantOffset = m_chunk->getInstruction(m_ip++);
-        Value constant = m_chunk->getConstant(constantOffset);
+        size_t constantOffset = m_chunk.getInstruction(m_ip++);
+        Value constant = m_chunk.getConstant(constantOffset);
         m_stack.push_back(constant);
         break;
       }

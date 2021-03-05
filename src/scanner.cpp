@@ -15,7 +15,7 @@ std::string_view Scanner::currentLexeme() const {
 }
 
 Token Scanner::makeToken(TokenType type) const {
-  return Token(type, currentLexeme(), m_line);
+  return Token(type, currentLexeme(), m_line, m_startPosition);
 }
 
 Token Scanner::scanToken() {
@@ -60,7 +60,7 @@ Token Scanner::scanToken() {
 }
 
 Token Scanner::errorToken(const std::string& message) const {
-  return Token(TokenType::TOKEN_ERROR, std::string_view(message), m_line);
+  return Token(TokenType::TOKEN_ERROR, std::string_view(message), m_line, m_startPosition);
 }
 
 bool Scanner::match(char expected) {
