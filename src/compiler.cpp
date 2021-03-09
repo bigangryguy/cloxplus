@@ -45,11 +45,53 @@ void Compiler::consume(TokenType type, const std::string& message) {
 }
 
 void Compiler::expression() {
+  parsePrecedence(Precedence::PREC_ASSIGNMENT);
+}
+
+void Compiler::parsePrecedence(Precedence precedence) {
 
 }
 
 void Compiler::endCompiler() {
   emitReturn();
+}
+
+void Compiler::number() {
+  double value = strtod(std::string{m_prevToken.lexeme()}.c_str(), nullptr);
+  emitConstant(value);
+}
+
+void Compiler::grouping() {
+  expression();
+  consume(TokenType::TOKEN_RIGHT_PAREN, "Expect ')' after expression.");
+}
+
+void Compiler::unary() {
+  TokenType operatorType = m_prevToken.type();
+
+  parsePrecedence(Precedence::PREC_UNARY);
+
+  switch (operatorType) {
+  case TokenType::TOKEN_MINUS: emitByte(static_cast<uint8_t>(TokenType::TOKEN_NEGATE)); break;
+  default:
+    return;
+  }
+}
+
+void Compiler::binary() {
+  TokenType operatorType = m_prevToken.type();
+
+  ParseRule* rule = getRule(operatorType);
+  parsePrecedence(static_cast<Precedence>(rule->precedence + 1));
+
+  switch (operatorType) {
+  case TokenType::TOKEN_PLUS: emitByte(OpCode::OP_ADD); break;
+  case TokenType::TOKEN_MINUS: emitByte(OpCode::OP_SUBTRACT); break;
+  case TokenType::TOKEN_STAR: emitByte(OpCode::OP_MULTIPLY); break;
+  case TokenType::TOKEN_SLASH: emitByte(OpCode::OP_DIVIDE); break;
+  default:
+    return;
+  }
 }
 
 void Compiler::emitByte(uint8_t byte) {
@@ -61,8 +103,22 @@ void Compiler::emitBytes(uint8_t byte1, uint8_t byte2) {
   emitByte(byte2);
 }
 
+void Compiler::emitConstant(Value value) {
+  emitBytes(OpCode::OP_CONSTANT, makeConstant(value));
+}
+
 void Compiler::emitReturn() {
   emitByte(OpCode::OP_RETURN);
+}
+
+uint8_t Compiler::makeConstant(Value value) {
+  size_t constant = m_chunk->writeConstant(value);
+  if (constant > UINT8_MAX) {
+    error("Too many constants in one chunk.");
+    return 0;
+  }
+
+  return static_cast<uint8_t>(constant);
 }
 
 std::string Compiler::errorAt(const Token& token, const std::string& message) {

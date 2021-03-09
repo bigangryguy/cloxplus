@@ -18,7 +18,7 @@ enum OpCode : uint8_t {
   OP_DIVIDE,
   // Operator: Negates the preceding numeric value
   OP_NEGATE,
-  // Operand: 3-byte offset to index of constant
+  // Operand: 2-byte offset to index of constant
   OP_CONSTANT_LONG,
   // Operand: None
   OP_RETURN
