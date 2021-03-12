@@ -1,5 +1,4 @@
 #include "scanner.h"
-#include "token.h"
 
 namespace cloxplus{
 Scanner::Scanner(const std::string& source) :

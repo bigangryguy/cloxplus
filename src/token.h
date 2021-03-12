@@ -3,12 +3,12 @@
 #include <string_view>
 
 namespace cloxplus {
-enum class TokenType {
+enum TokenType : int {
   // Single-character tokens.
   TOKEN_LEFT_PAREN, TOKEN_RIGHT_PAREN,
   TOKEN_LEFT_BRACE, TOKEN_RIGHT_BRACE,
   TOKEN_COMMA, TOKEN_DOT, TOKEN_MINUS, TOKEN_PLUS,
-  TOKEN_SEMICOLON, TOKEN_SLASH, TOKEN_STAR, TOKEN_NEGATE,
+  TOKEN_SEMICOLON, TOKEN_SLASH, TOKEN_STAR,
 
   // One or two character tokens.
   TOKEN_BANG, TOKEN_BANG_EQUAL,

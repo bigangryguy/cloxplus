@@ -4,8 +4,14 @@
 #include <fmt/core.h>
 #include <iostream>
 #include <cassert>
+#include <utility>
 
 namespace cloxplus {
+ParseRule::ParseRule(ParseFn prefix, ParseFn infix, Precedence precedence)
+    : m_prefix(std::move(prefix)), m_infix(std::move(infix)), m_precedence(precedence)
+{
+}
+
 Compiler::Compiler(const std::string& source):
  m_scanner(source)
 {
@@ -72,7 +78,7 @@ void Compiler::unary() {
   parsePrecedence(Precedence::PREC_UNARY);
 
   switch (operatorType) {
-  case TokenType::TOKEN_MINUS: emitByte(static_cast<uint8_t>(TokenType::TOKEN_NEGATE)); break;
+  case TokenType::TOKEN_MINUS: emitByte(static_cast<uint8_t>(OpCode::OP_NEGATE)); break;
   default:
     return;
   }
@@ -82,7 +88,7 @@ void Compiler::binary() {
   TokenType operatorType = m_prevToken.type();
 
   ParseRule* rule = getRule(operatorType);
-  parsePrecedence(static_cast<Precedence>(rule->precedence + 1));
+  parsePrecedence(static_cast<Precedence>(rule->precedence() + 1));
 
   switch (operatorType) {
   case TokenType::TOKEN_PLUS: emitByte(OpCode::OP_ADD); break;
@@ -109,6 +115,10 @@ void Compiler::emitConstant(Value value) {
 
 void Compiler::emitReturn() {
   emitByte(OpCode::OP_RETURN);
+}
+
+ParseRule* Compiler::getRule(TokenType type) {
+  return &rules[type];
 }
 
 uint8_t Compiler::makeConstant(Value value) {

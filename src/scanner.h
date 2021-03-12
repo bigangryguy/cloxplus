@@ -1,10 +1,11 @@
 #pragma once
 
+#include "token.h"
+
 #include <string>
 
 namespace cloxplus {
 class Token;
-enum class TokenType;
 
 class Scanner {
 public:
