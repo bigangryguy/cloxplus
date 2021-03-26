@@ -21,7 +21,7 @@ VM::~VM()
 InterpretResult VM::interpret(const std::string& source)
 {
   Compiler compiler(source);
-  if (compiler.compile(&m_chunk)) {
+  if (!compiler.compile(&m_chunk)) {
     m_chunk.clear();
     return InterpretResult::INTERPRET_COMPILE_ERROR;
   }
@@ -48,7 +48,7 @@ InterpretResult VM::run()
       std::cout << " ]" << std::endl;
     }
     std::string output{};
-    Debugger::disassembleInstruction(*m_chunk, m_ip, output);
+    Debugger::disassembleInstruction(m_chunk, m_ip, output);
     std::cout << output << std::endl;
 #endif
     // First operand is last item on stack; second operand is next to last

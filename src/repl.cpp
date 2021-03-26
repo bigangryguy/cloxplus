@@ -1,5 +1,6 @@
 #include "repl.h"
 #include "compiler.h"
+#include "vm.h"
 #include "chunk.h"
 #include "common.h"
 
@@ -60,9 +61,7 @@ void Repl::runFile(std::string_view path) {
 }
 
 InterpretResult Repl::interpret(const std::string& source) {
-  Chunk chunk{};
-  Compiler compiler(source);
-  compiler.compile(&chunk);
-  return InterpretResult::INTERPRET_OK;
+  VM vm;
+  return vm.interpret(source);
 }
 }

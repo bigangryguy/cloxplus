@@ -32,8 +32,8 @@ private:
 
   std::string m_source;
   const size_t m_lengthSource;
-  size_t m_startPosition = -1;
-  size_t m_currentPosition = -1;
+  int m_startPosition = -1;
+  int m_currentPosition = -1;
   int m_line = 1;
 };
 }

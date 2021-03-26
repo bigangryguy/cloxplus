@@ -6,6 +6,10 @@
 #include <cassert>
 #include <utility>
 
+#ifdef DEBUG_PRINT_CODE
+#include "debugger.h"
+#endif
+
 namespace cloxplus {
 ParseRule::ParseRule(ParseFn prefix, ParseFn infix, Precedence precedence)
     : m_prefix(std::move(prefix)), m_infix(std::move(infix)), m_precedence(precedence)
@@ -37,7 +41,7 @@ void Compiler::advance() {
       break;
     }
 
-    errorAtCurrent(std::string{m_currToken.lexeme()});
+    std::cerr << errorAtCurrent(std::string{m_currToken.lexeme()}) << std::endl;
   }
 }
 
@@ -47,7 +51,7 @@ void Compiler::consume(TokenType type, const std::string& message) {
     return;
   }
 
-  errorAtCurrent(message);
+  std::cerr << errorAtCurrent(message) << std::endl;
 }
 
 void Compiler::expression() {
@@ -55,11 +59,29 @@ void Compiler::expression() {
 }
 
 void Compiler::parsePrecedence(Precedence precedence) {
+  advance();
+  ParseFn prefixRule = getRule(m_prevToken.type())->prefix();
+  if (prefixRule == nullptr) {
+    std::cerr << error("Expect expression.") << std::endl;
+    return;
+  }
 
+  prefixRule();
+
+  while (precedence <= getRule(m_currToken.type())->precedence()) {
+    advance();
+    ParseFn infixRule = getRule(m_prevToken.type())->infix();
+    infixRule();
+  }
 }
 
 void Compiler::endCompiler() {
   emitReturn();
+#ifdef DEBUG_PRINT_CODE
+  if (m_hadError) {
+    std::cout << Debugger::disassembleChunk(*m_chunk, "code") << std::endl;
+  }
+#endif
 }
 
 void Compiler::number() {
@@ -124,7 +146,7 @@ ParseRule* Compiler::getRule(TokenType type) {
 uint8_t Compiler::makeConstant(Value value) {
   size_t constant = m_chunk->writeConstant(value);
   if (constant > UINT8_MAX) {
-    error("Too many constants in one chunk.");
+    std::cerr << error("Too many constants in one chunk.") << std::endl;
     return 0;
   }
 
@@ -137,17 +159,17 @@ std::string Compiler::errorAt(const Token& token, const std::string& message) {
   }
   m_panicMode = true;
 
-  std::string output = fmt::format("[line {}] Error", token.line());
+  std::string output = fmt::format("[line {}] Error: ", token.line());
 
   if (token.type() == TokenType::TOKEN_EOF) {
-    output += "\nAt end of source";
+    output = fmt::format("{}At end of source.", output);
   } else if (token.type() == TokenType::TOKEN_ERROR) {
     // Nothing yet.
   } else {
-    output += fmt::format(" at '{}'", token.lexeme());
+    output = fmt::format("{} at '{}'", output, token.lexeme());
   }
 
-  output += fmt::format("\n{}", message);
+  output = fmt::format("{}\n{}", output, message);
 
   m_hadError = true;
   return output;

@@ -18,7 +18,7 @@ Token Scanner::makeToken(TokenType type) const {
 }
 
 Token Scanner::scanToken() {
-  if (isAtEnd()) {
+  if (m_currentPosition >= 0 && isAtEnd()) {
     return makeToken(TokenType::TOKEN_EOF);
   }
 
@@ -59,7 +59,7 @@ Token Scanner::scanToken() {
 }
 
 Token Scanner::errorToken(const std::string& message) const {
-  return Token(TokenType::TOKEN_ERROR, std::string_view(message), m_line, m_startPosition);
+  return Token(TokenType::TOKEN_ERROR, std::string_view(message), m_line, 0);
 }
 
 bool Scanner::match(char expected) {
@@ -193,7 +193,7 @@ TokenType Scanner::identifierType(std::string_view identifier) {
 }
 
 bool Scanner::isAtEnd() const {
-  return m_currentPosition == m_lengthSource;
+  return (m_currentPosition >= m_lengthSource - 1) || (m_source[m_currentPosition] == '\0');
 }
 
 bool Scanner::isDigit(char c) {
